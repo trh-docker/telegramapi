@@ -2,7 +2,7 @@
 FROM quay.io/spivegin/gitonly:latest AS git
 
 FROM spivegin/alpine:golang AS builder
-RUN apk update  && apk add --no-cache openssh-client
+RUN apk update  && apk add --no-cache openssh-client bash nano wget curl
 RUN ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa && git config --global user.name "quadtone" && git config --global user.email "quadtone@txtsme.com"
 COPY --from=git /root/.ssh /root/.ssh
 RUN ssh-keyscan -H github.com > ~/.ssh/known_hosts &&\
@@ -38,6 +38,12 @@ RUN apk update &&\
     cd .. &&\
     cd .. &&\
     ls -l /usr/local
+WORKDIR /root/
+
+RUN git clone https://github.com/gotd/td.git &&\
+    git clone https://github.com/celestix/gotgproto.git
+
+
 
 
 
